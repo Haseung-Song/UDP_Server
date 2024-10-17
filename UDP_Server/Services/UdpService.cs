@@ -27,12 +27,12 @@ namespace UDP_Server.Services
             {
                 Console.WriteLine("UDP Server Started...");
                 _ = MessageBox.Show("UDP 서버 통신을 시작합니다...", "서버 시작", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (_udpServer == null)
+                {
+                    _udpServer = new UdpClient(_port);
+                }
                 while (true)
                 {
-                    if (_udpServer == null)
-                    {
-                        _udpServer = new UdpClient(_port);
-                    }
                     // 1. 클라이언트 메시지 [수신] 부분
                     UdpReceiveResult result = await _udpServer.ReceiveAsync();
                     string messageListen = Encoding.UTF8.GetString(result.Buffer);
