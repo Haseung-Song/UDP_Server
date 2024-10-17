@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net.Sockets;
-using System.Text;
 using System.Windows;
+using UDP_Server.Models;
+using static UDP_Server.Models.Parser;
 
 namespace UDP_Server.Services
 {
@@ -13,7 +14,7 @@ namespace UDP_Server.Services
     {
         private UdpClient _udpServer;
         private static int _port;
-        public event Action<string, DateTime> MessageReceived; // 이벤트 정의
+        public event Action<byte[], DateTime> MessageReceived; // 이벤트 정의
 
         public UdpService(int port)
         {
@@ -35,8 +36,7 @@ namespace UDP_Server.Services
                 {
                     // 1. 클라이언트 메시지 [수신] 부분
                     UdpReceiveResult result = await _udpServer.ReceiveAsync();
-                    string messageListen = Encoding.UTF8.GetString(result.Buffer);
-                    Console.WriteLine($"Received: {messageListen}");
+                    byte[] messageListen = result.Buffer;
 
                     // 2. 서버 메시지 [송신] 부분
                     //byte[] byteMessage = Encoding.UTF8.GetBytes(_messageSend);

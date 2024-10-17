@@ -7,6 +7,7 @@ using System.Windows.Input;
 using UDP_Server.Common;
 using UDP_Server.Models;
 using UDP_Server.Services;
+using static UDP_Server.Models.Parser;
 
 namespace UDP_Server.ViewModels
 {
@@ -151,11 +152,16 @@ namespace UDP_Server.ViewModels
             _udpService.UdpStart();
         }
 
-        private void OnMessageReceived(string messageListen, DateTime currentTime)
+        private void OnMessageReceived(byte[] messageListen, DateTime currentTime)
         {
+            Parser parser = new Parser();
+            FlightControlField parserData = parser.Parse(messageListen);
+            // byte[]를 16진수 문자열로 변환
+            string messageAsHex = BitConverter.ToString(messageListen).Replace("-", " ");
+            Console.WriteLine($"Received: {messageAsHex}");
             DisplayInfo.Add(new DisplayInfo
             {
-                MessageListen = messageListen,
+                MessageListen = parserData.FlightMode,
                 CurrentTime = currentTime
             });
 

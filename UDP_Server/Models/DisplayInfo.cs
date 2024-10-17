@@ -8,7 +8,7 @@ namespace UDP_Server.Models
 
         public DateTime CurrentTime { get; set; }
 
-        public string MessageListen { get; set; }
+        public byte MessageListen { get; set; }
 
         #endregion
     }

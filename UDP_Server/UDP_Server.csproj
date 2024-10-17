@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Parser.cs" />
     <Compile Include="Services\UdpService.cs" />
     <Compile Include="ViewModels\MainVM.cs" />
     <Page Include="Views\MainWindow.xaml">
