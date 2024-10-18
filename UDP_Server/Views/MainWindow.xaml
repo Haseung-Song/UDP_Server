@@ -3,11 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converter="clr-namespace:System.ComponentModel;assembly=System"
         mc:Ignorable="d"
         Title="UDP_Server"
         Width="900"
         Height="600"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <converter:TypeConverter x:Key="FormatConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -96,7 +100,7 @@
                                                    FontSize="12"
                                                    FontWeight="Bold">
                                             <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}[{0:HH:mm:ss}] {1}">
+                                                <MultiBinding StringFormat="{}[{0:HH:mm:ss}] {1}" Converter="{StaticResource FormatConverter}">
                                                     <Binding Path="CurrentTime"/>
                                                     <Binding Path="MessageListen"/>
                                                 </MultiBinding>

@@ -161,7 +161,7 @@ namespace UDP_Server.ViewModels
             Console.WriteLine($"Received: {messageAsHex}");
             DisplayInfo.Add(new DisplayInfo
             {
-                MessageListen = parserData.FlightMode,
+                MessageListen = parserData.ModeOverride,
                 CurrentTime = currentTime
             });
 
