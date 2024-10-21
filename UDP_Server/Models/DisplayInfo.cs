@@ -6,6 +6,8 @@ namespace UDP_Server.Models
     {
         #region [DisplayInfo] 모델
 
+        public string Description { get; set; }
+
         public DateTime CurrentTime { get; set; }
 
         public byte MessageListen { get; set; }

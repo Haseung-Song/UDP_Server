@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace UDP_Server.Converters
+namespace FormatConverter
 {
     public class FormatConverter : IValueConverter
     {

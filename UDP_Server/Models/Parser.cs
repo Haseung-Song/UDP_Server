@@ -11,7 +11,6 @@ namespace UDP_Server.Models
             {
                 throw new ArgumentException("Invalid data length");
             }
-
             FlightControlField field = new FlightControlField
             {
                 ModeOverride = BitOperatorConverter.GetBit(data, 4, 7),
@@ -21,14 +20,30 @@ namespace UDP_Server.Models
 
         public class FlightControlField
         {
-            // 7번째 비트
+            /// <summary>
+            /// [Byte #5.] 7번째 비트
+            /// </summary>
             public byte ModeOverride { get; set; }
 
-            // 6~5번째 비트
+            /// <summary>
+            /// [Byte #5.] 6~5번째 비트
+            /// </summary>
             public byte FlightMode { get; set; }
 
-            // 4~1번째 비트
+            /// <summary>
+            /// [Byte #5.] 4~1번째 비트
+            /// </summary>
             public byte ModeEngage { get; set; }
+
+            /// <summary>
+            /// [Byte #6.] 7번째 비트
+            /// </summary>
+            public byte FlapOverride { get; set; }
+
+            /// <summary>
+            /// [Byte #6.] 6~1번째 비트
+            /// </summary>
+            public byte FlapAngle { get; set; }
         }
 
     }

@@ -21,6 +21,7 @@ namespace UDP_Server.ViewModels
         private DateTime _currentTime;
         private string _messageListen;
         private ObservableCollection<DisplayInfo> _displayInfo;
+        private ObservableCollection<string> _description;
 
         #endregion
 
@@ -101,7 +102,7 @@ namespace UDP_Server.ViewModels
         }
 
         /// <summary>
-        /// [DeleteFolderInfo]
+        /// [DisplayInfo]
         /// </summary>
         public ObservableCollection<DisplayInfo> DisplayInfo
         {
@@ -111,6 +112,24 @@ namespace UDP_Server.ViewModels
                 if (_displayInfo != value)
                 {
                     _displayInfo = value;
+                    OnPropertyChanged();
+                }
+
+            }
+
+        }
+
+        /// <summary>
+        /// [DeleteFolderInfo]
+        /// </summary>
+        public ObservableCollection<string> Description
+        {
+            get => _description;
+            set
+            {
+                if (_description != value)
+                {
+                    _description = value;
                     OnPropertyChanged();
                 }
 
@@ -159,12 +178,25 @@ namespace UDP_Server.ViewModels
             // byte[]를 16진수 문자열로 변환
             string messageAsHex = BitConverter.ToString(messageListen).Replace("-", " ");
             Console.WriteLine($"Received: {messageAsHex}");
-            DisplayInfo.Add(new DisplayInfo
-            {
-                MessageListen = parserData.ModeOverride,
-                CurrentTime = currentTime
-            });
-
+            DisplayInfo?.Clear();
+            DisplayInfo.Add(new DisplayInfo { Description = "Mode override", MessageListen = parserData.ModeOverride, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Flight mode", MessageListen = parserData.FlightMode, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Mode engage", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Flap Override", MessageListen = parserData.FlapOverride, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Flap angle", MessageListen = parserData.FlapAngle, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Tilt angle", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Knob speed", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "knob altitude", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Knob heading", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Stick throttle", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Stick roll", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Stick pitch", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Stick yaw", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Lon. of LP", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Lat. of LP", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Alt. of LP", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Engine start/stop", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Raft drop", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
         }
         #endregion
     }
