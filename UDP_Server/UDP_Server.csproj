@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BitOperatorConverter.cs" />
     <Compile Include="Converters\FormatConverter.cs" />
+    <Compile Include="Models\AutoScrollViewer.cs" />
     <Compile Include="Models\Parser.cs" />
     <Compile Include="Services\UdpService.cs" />
     <Compile Include="ViewModels\MainVM.cs" />

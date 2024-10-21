@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.Net.Sockets;
 using System.Windows;
-using UDP_Server.Models;
-using static UDP_Server.Models.Parser;
 
 namespace UDP_Server.Services
 {
