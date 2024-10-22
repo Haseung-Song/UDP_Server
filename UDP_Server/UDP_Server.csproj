@@ -35,6 +35,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Soletop, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Soletop.dll</HintPath>
+    </Reference>
+    <Reference Include="Soletop.IO, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Soletop.IO.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -56,7 +64,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\BitOperatorConverter.cs" />
-    <Compile Include="Converters\FormatConverter.cs" />
     <Compile Include="Models\AutoScrollViewer.cs" />
     <Compile Include="Models\Parser.cs" />
     <Compile Include="Services\UdpService.cs" />

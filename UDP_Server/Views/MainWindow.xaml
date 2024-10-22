@@ -3,16 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local1="clr-namespace:FormatConverter"
-        xmlns:local2="clr-namespace:AutoScrollViewer"
         mc:Ignorable="d"
         Title="UDP_Server"
         Width="900"
-        Height="600"
+        Height="610"
+        xmlns:local2="clr-namespace:AutoScrollViewer"
         WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <local1:FormatConverter x:Key="FormatConverter"/>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -23,7 +19,7 @@
             <ColumnDefinition Width="1.5*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
+
         <Border Grid.Column="0">
             <StackPanel Margin="10">
                 <TextBlock Text="IP"
@@ -61,14 +57,13 @@
             <Grid Margin="5">
                 <Grid>
                     <ListView ItemsSource="{Binding DisplayInfo}"
-                              local2:AutoScrollViewer.AutoScroll="True"
                               HorizontalAlignment="Stretch"
+                              local2:AutoScrollViewer.AutoScroll="False"
                               ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                              ScrollViewer.VerticalScrollBarVisibility="Auto"
-                              ScrollViewer.CanContentScroll="True">
+                              ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Control" Width="250">
+                                <GridViewColumn Header="Flight" Width="250">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -82,7 +77,7 @@
                                 <GridViewColumn Header="Control" Width="250">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding MessageListen, Converter={StaticResource FormatConverter}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                            <TextBlock Text="{Binding MessageListen, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                        TextAlignment="Center"
                                                        FontSize="12"
                                                        FontWeight="Bold">
@@ -110,7 +105,7 @@
                         </ListView.View>
                     </ListView>
                 </Grid>
-            </Grid> 
+            </Grid>
         </Border>
 
         <Border Grid.Row="2"
@@ -124,6 +119,6 @@
                         Width="100"/>
             </StackPanel>
         </Border>
-        
+
     </Grid>
 </Window>

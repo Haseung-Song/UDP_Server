@@ -19,7 +19,7 @@ namespace UDP_Server.ViewModels
         private string _ipAddress;
         private int _port;
         private DateTime _currentTime;
-        private string _messageListen;
+
         private ObservableCollection<DisplayInfo> _displayInfo;
         private ObservableCollection<string> _description;
 
@@ -70,7 +70,7 @@ namespace UDP_Server.ViewModels
         /// </summary>
         public DateTime CurrentTime
         {
-            get => _currentTime = DateTime.Now;
+            get => _currentTime;
             set
             {
                 if (_currentTime != value)
@@ -83,23 +83,6 @@ namespace UDP_Server.ViewModels
 
         }
 
-        /// <summary>
-        /// [MessageReceive]
-        /// </summary>
-        public string MessageListen
-        {
-            get => _messageListen;
-            set
-            {
-                if (_messageListen != value)
-                {
-                    _messageListen = value;
-                    OnPropertyChanged();
-                }
-
-            }
-
-        }
 
         /// <summary>
         /// [DisplayInfo]
@@ -171,32 +154,34 @@ namespace UDP_Server.ViewModels
             _udpService.UdpStart();
         }
 
+
         private void OnMessageReceived(byte[] messageListen, DateTime currentTime)
         {
             Parser parser = new Parser();
             FlightControlField parserData = parser.Parse(messageListen);
-            // byte[]를 16진수 문자열로 변환
-            string messageAsHex = BitConverter.ToString(messageListen).Replace("-", " ");
+            string messageAsHex = BitConverter.ToString(messageListen).Replace("-", " "); // byte[]를 16진수 문자열로 변환
             Console.WriteLine($"Received: {messageAsHex}");
+
             DisplayInfo?.Clear();
-            DisplayInfo.Add(new DisplayInfo { Description = "Mode override", MessageListen = parserData.ModeOverride, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Flight mode", MessageListen = parserData.FlightMode, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Mode engage", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Flap Override", MessageListen = parserData.FlapOverride, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Flap angle", MessageListen = parserData.FlapAngle, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Tilt angle", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Knob speed", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "knob altitude", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Knob heading", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Stick throttle", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Stick roll", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Stick pitch", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Stick yaw", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Lon. of LP", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Lat. of LP", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Alt. of LP", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Engine start/stop", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
-            DisplayInfo.Add(new DisplayInfo { Description = "Raft drop", MessageListen = parserData.ModeEngage, CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Mode override", MessageListen = parserData.ModeOverride.ModeOverrideParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Flight mode", MessageListen = parserData.FlightMode.FlightModeParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Mode engage", MessageListen = parserData.ModeEngage.ModeEngageParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Flap Override", MessageListen = parserData.FlapOverride.FlapOverrideParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "플랩각 조종 명령", MessageListen = parserData.FlapAngle.FlapAngleParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Wing Tilt Override", MessageListen = parserData.FlapAngle.WingTiltOverrideParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "틸트각 조종 명령", MessageListen = parserData.TiltAngle.TiltAngleParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "노브 속도 조종명령", MessageListen = parserData.KnobSpeed.KnobSpeedParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "노브 고도 조종명령", MessageListen = parserData.KnobAltitude.KnobAltitudeParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "노브 방위 조종명령", MessageListen = parserData.KnobHeading.KnobHeadingParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "스틱 고도 조종명령", MessageListen = parserData.StickThrottle.StickThrottleParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "스틱 횡방향 속도 조종명령", MessageListen = parserData.StickRoll.StickRollParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "스틱 종방향 속도 조종명령", MessageListen = parserData.StickPitch.StickPitchParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "스틱 방위 조종명령", MessageListen = parserData.StickYaw.StickYawParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Longitude of Landing point", MessageListen = parserData.LonOfLP.LonOfLPParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Latitude of Landing point", MessageListen = parserData.LatOfLP.LatOfLPParser(), CurrentTime = currentTime }); ;
+            DisplayInfo.Add(new DisplayInfo { Description = "Altitude of Landing point", MessageListen = parserData.AltOfLP.AltOfLPParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "Engine Start / Stop", MessageListen = parserData.EngineStartStop.EngineStartStopParser(), CurrentTime = currentTime });
+            DisplayInfo.Add(new DisplayInfo { Description = "구조장비 투하 전 개폐명령", MessageListen = parserData.RaftDrop.RaftDropParser(), CurrentTime = currentTime });
         }
         #endregion
     }
