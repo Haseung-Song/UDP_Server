@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="UDP_Server"
-        Width="900"
+        Width="1110"
         Height="610"
         xmlns:local2="clr-namespace:AutoScrollViewer"
         WindowStartupLocation="CenterScreen">
@@ -61,46 +61,56 @@
                               local2:AutoScrollViewer.AutoScroll="False"
                               ScrollViewer.HorizontalScrollBarVisibility="Auto"
                               ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Flight" Width="250">
+
+                                <GridViewColumn Header="Flight" Width="330">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                        TextAlignment="Center"
                                                        FontSize="12"
-                                                       FontWeight="Bold">
-                                            </TextBlock>
+                                                       Foreground="DarkGreen"
+                                                       FontWeight="Bold"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Control" Width="250">
+
+                                <GridViewColumn Header="Control" Width="330">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding MessageListen, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                        TextAlignment="Center"
                                                        FontSize="12"
-                                                       FontWeight="Bold">
-                                            </TextBlock>
+                                                       Foreground="DarkRed"
+                                                       FontWeight="Bold"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Field" Width="250">
+
+                                <GridViewColumn Header="Field" Width="330">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock TextAlignment="Center"
                                                        FontSize="12"
+                                                       Foreground="DarkBlue"
                                                        FontWeight="Bold">
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="{}[{0:HH:mm:ss}] {1}">
                                                         <Binding Path="CurrentTime"/>
-                                                        <Binding Path="MessageListen"/>
+                                                        <Binding Path="MessageByte"/>
                                                     </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
+
                             </GridView>
                         </ListView.View>
                     </ListView>

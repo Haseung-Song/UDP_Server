@@ -25,7 +25,7 @@ namespace UDP_Server.Services
             try
             {
                 Console.WriteLine("UDP Server Started...");
-                _ = MessageBox.Show("UDP 서버 통신을 시작합니다...", "서버 시작", MessageBoxButton.OK, MessageBoxImage.Information);
+                _ = MessageBox.Show("UDP 서버 통신을 시작합니다!", "서버 시작", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 if (_udpServer == null)
                 {

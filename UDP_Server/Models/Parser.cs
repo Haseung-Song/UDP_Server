@@ -26,9 +26,15 @@ namespace UDP_Server.Models
                     // 두 번째 인자: 추출할 바이트 수.
                     // 세 번째 인자: 비트 시작 위치.
                     // 네 번째 인자: 추출할 비트 수.
+
+                    // Byte #5.
                     ModeOverride = (byte)stream.GetBits(4, 1, 7, 1), // 7번째 비트를 추출 (ModeOverride)
                     FlightMode = (byte)stream.GetBits(4, 1, 5, 2), // 6~5번째 비트를 추출 (FlightMode)
                     ModeEngage = (byte)stream.GetBits(4, 1, 1, 4), // 4~1번째 비트를 추출 (ModeEngage)
+
+                    // Byte #6.
+                    FlapOverride = (byte)stream.GetBits(5, 1, 7, 1), // 7번째 비트를 추출 (FlapOverride)
+                    FlapAngle = (byte)stream.GetBits(5, 1, 1, 6), // 6~1번째 비트를 추출 (FlapAngle)
                 };
                 return field;
             }
@@ -157,7 +163,7 @@ namespace UDP_Server.Models
     {
         public static string ModeOverrideParser(this byte modeOverrideByte)
         {
-            return modeOverrideByte == 1 ? "ON" : "OFF";
+            return modeOverrideByte == 1 ? "ON(default)" : "OFF";
         }
 
         public static string FlightModeParser(this byte flightModeByte)
@@ -208,7 +214,7 @@ namespace UDP_Server.Models
 
         public static string FlapOverrideParser(this byte flapOverrideByte)
         {
-            return null;
+            return flapOverrideByte == 1 ? "ON(default)" : "OFF";
         }
 
         public static string FlapAngleParser(this byte flapAngleByte)
