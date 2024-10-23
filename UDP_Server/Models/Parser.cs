@@ -35,6 +35,10 @@ namespace UDP_Server.Models
                     // Byte #6.
                     FlapOverride = (byte)stream.GetBits(5, 1, 7, 1), // 7번째 비트를 추출 (FlapOverride)
                     FlapAngle = (byte)stream.GetBits(5, 1, 1, 6), // 6~1번째 비트를 추출 (FlapAngle)
+
+                    // Byte #7.
+                    WingTiltOverride = (byte)stream.GetBits(6, 1, 7, 1), // 7번째 비트를 추출 (WingTiltOverride)
+                    TiltAngle = (byte)stream.GetBits(6, 1, 0, 7), // 6~0번째 비트를 추출 (TiltAngle)
                 };
                 return field;
             }
@@ -222,12 +226,12 @@ namespace UDP_Server.Models
             return null;
         }
 
-        public static string TiltAngleParser(this byte tiltAngleByte)
+        public static string WingTiltOverrideParser(this byte wingTiltOverrideByte)
         {
-            return null;
+            return wingTiltOverrideByte == 1 ? "ON(default)" : "OFF";
         }
 
-        public static string WingTiltOverrideParser(this byte wingTiltOverrideByte)
+        public static string TiltAngleParser(this byte tiltAngleByte)
         {
             return null;
         }
