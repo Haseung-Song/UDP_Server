@@ -28,17 +28,68 @@ namespace UDP_Server.Models
                     // 네 번째 인자: 추출할 비트 수.
 
                     // Byte #5.
-                    ModeOverride = (byte)stream.GetBits(4, 1, 7, 1), // 7번째 비트를 추출 (ModeOverride)
-                    FlightMode = (byte)stream.GetBits(4, 1, 5, 2), // 6~5번째 비트를 추출 (FlightMode)
-                    ModeEngage = (byte)stream.GetBits(4, 1, 1, 4), // 4~1번째 비트를 추출 (ModeEngage)
+                    // 7번째 비트를 추출 (ModeOverride)
+                    ModeOverride = (byte)stream.GetBits(4, 1, 7, 1),
+
+                    // 6~5번째 비트를 추출 (FlightMode)
+                    FlightMode = (byte)stream.GetBits(4, 1, 5, 2),
+
+                    // 4~1번째 비트를 추출 (ModeEngage)
+                    ModeEngage = (byte)stream.GetBits(4, 1, 1, 4),
 
                     // Byte #6.
-                    FlapOverride = (byte)stream.GetBits(5, 1, 7, 1), // 7번째 비트를 추출 (FlapOverride)
-                    FlapAngle = (byte)stream.GetBits(5, 1, 1, 6), // 6~1번째 비트를 추출 (FlapAngle)
+                    // 7번째 비트를 추출 (FlapOverride)
+                    FlapOverride = (byte)stream.GetBits(5, 1, 7, 1),
+
+                    // 6~1번째 비트를 추출  (FlapAngle)
+                    FlapAngle = (byte)stream.GetBits(5, 1, 1, 6),
 
                     // Byte #7.
-                    WingTiltOverride = (byte)stream.GetBits(6, 1, 7, 1), // 7번째 비트를 추출 (WingTiltOverride)
-                    TiltAngle = (byte)stream.GetBits(6, 1, 0, 7), // 6~0번째 비트를 추출 (TiltAngle)
+                    // 7번째 비트를 추출 (WingTiltOverride)
+                    WingTiltOverride = (byte)stream.GetBits(6, 1, 7, 1),
+
+                    // 6~0번째 비트를 추출      (TiltAngle)
+                    TiltAngle = (byte)stream.GetBits(6, 1, 0, 7),
+
+                    // Byte #8.
+                    // 8 바이트를 추출 (KnobSpeed)
+                    KnobSpeed = (byte)stream.Get(7, 1),
+
+                    // Byte #9.
+                    // 9 바이트를 추출 (KnobAltitude)
+                    KnobAltitude = (byte)stream.Get(8, 1),
+
+                    // Byte #10.
+                    // 10 바이트를 추출 (KnobHeading)
+                    KnobHeading = (byte)stream.Get(9, 1),
+
+                    // Byte #11.
+                    // 11 바이트를 추출 (StickThrottle)
+                    StickThrottle = (byte)stream.Get(10, 1),
+
+                    // Byte #12.
+                    // 12 바이트를 추출 (StickRoll)
+                    StickRoll = (byte)stream.Get(11, 1),
+
+                    // Byte #13.
+                    // 13 바이트를 추출 (StickPitch)
+                    StickPitch = (byte)stream.Get(12, 1),
+
+                    // Byte #14.
+                    // 14 바이트를 추출 (StickYaw)
+                    StickYaw = (byte)stream.Get(13, 1),
+
+                    // Byte #15. ~ Byte #18.
+                    // 15 ~ 18 바이트를 추출 (LonOfLP)
+                    LonOfLP = (byte)stream.Get(14, 4),
+
+                    // Byte # 19. ~ Byte #22.
+                    // 19 ~ 22 바이트를 추출 (LatOfLP)
+                    LatOfLP = (byte)stream.Get(18, 4),
+
+                    // Byte # 23. ~ Byte #24.
+                    // 23 ~ 24 바이트를 추출 (AltOfLP)
+                    AltOfLP = (byte)stream.Get(22, 2),
                 };
                 return field;
             }
@@ -218,72 +269,86 @@ namespace UDP_Server.Models
 
         public static string FlapOverrideParser(this byte flapOverrideByte)
         {
-            return flapOverrideByte == 1 ? "ON(default)" : "OFF";
+            int flapOverrideByteToInt = flapOverrideByte;
+            return flapOverrideByteToInt == 1 ? "ON(default)" : "OFF";
         }
 
         public static string FlapAngleParser(this byte flapAngleByte)
         {
-            return null;
+            int flapAngleByteToInt = flapAngleByte;
+            return (flapAngleByteToInt <= 40) ? $"{flapAngleByteToInt}°(도)" : "Unknown";
         }
 
         public static string WingTiltOverrideParser(this byte wingTiltOverrideByte)
         {
-            return wingTiltOverrideByte == 1 ? "ON(default)" : "OFF";
+            int wingTiltOverrideByteToInt = wingTiltOverrideByte;
+            return wingTiltOverrideByteToInt == 1 ? "ON(default)" : "OFF";
         }
 
         public static string TiltAngleParser(this byte tiltAngleByte)
         {
-            return null;
+            int tiltAngleByteToInt = tiltAngleByte;
+            return (tiltAngleByteToInt <= 90) ? $"{tiltAngleByte}°(도)" : "Unknown";
         }
 
         public static string KnobSpeedParser(this byte knobSpeedByte)
         {
-            return null;
+            int knobSpeedByteToInt = knobSpeedByte;
+            return (knobSpeedByteToInt <= 250) ? $"{knobSpeedByteToInt} (km/h)" : "Unknown";
         }
 
         public static string KnobAltitudeParser(this byte knobAltitudeByte)
         {
-            return null;
+            int knobAltitudeByteToInt = knobAltitudeByte;
+            return (knobAltitudeByteToInt <= 200) ? $"{knobAltitudeByteToInt} (m)" : "Unknown";
         }
 
         public static string KnobHeadingParser(this byte knobHeadingByte)
         {
-            return null;
+            int knobHeadingParserToInt = knobHeadingByte;
+            return (knobHeadingParserToInt <= 179) ? $"{knobHeadingParserToInt}°(도)" : "Unknown";
         }
 
         public static string StickThrottleParser(this byte stickThrottleByte)
         {
-            return null;
+            int stickThrottleByteToInt = stickThrottleByte;
+            return (stickThrottleByteToInt <= 200) ? $"{stickThrottleByteToInt}" : "Unknown";
         }
 
         public static string StickRollParser(this byte stickRollByte)
         {
-            return null;
+            int stickRollByteToInt = stickRollByte;
+            return (stickRollByteToInt <= 200) ? $"{stickRollByteToInt}" : "Unknown";
         }
 
         public static string StickPitchParser(this byte stickPitchByte)
         {
-            return null;
+            int stickPitchByteToInt = stickPitchByte;
+            return (stickPitchByteToInt <= 200) ? $"{stickPitchByteToInt}" : "Unknown";
         }
 
         public static string StickYawParser(this byte stickYawByte)
         {
-            return null;
+            int stickYawByteToInt = stickYawByte;
+            return (stickYawByteToInt <= 200) ? $"{stickYawByteToInt}" : "Unknown";
         }
 
         public static string LonOfLPParser(this byte lonOfLPByte)
         {
-            return null;
+            int lonOfLPByteToInt = lonOfLPByte;
+            return (lonOfLPByteToInt <= 360) ? $"{lonOfLPByteToInt}°(도)" : "Unknown";
         }
 
         public static string LatOfLPParser(this byte latOfLPByte)
         {
-            return null;
+            int latOfLPByteToInt = latOfLPByte;
+            return (latOfLPByteToInt <= 180) ? $"{latOfLPByteToInt}°(도)" : "Unknown";
         }
 
         public static string AltOfLPParser(this byte altOfLPByte)
         {
-            return null;
+            int altOfLPByteToInt = altOfLPByte;
+            return (altOfLPByteToInt <= 1500) ? $"{altOfLPByteToInt} (m)" : "Unknown";
         }
 
         public static string EngineStartStopParser(this byte engineStartStopByte)
