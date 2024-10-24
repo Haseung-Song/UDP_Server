@@ -7,8 +7,15 @@
         Title="UDP_Server"
         Width="1110"
         Height="610"
-        xmlns:local2="clr-namespace:AutoScrollViewer"
+        xmlns:local1="clr-namespace:ByteToHexStringConverter"
+        xmlns:local2="clr-namespace:ByteArrayToHexStringConverter"
+        xmlns:local3="clr-namespace:AutoScrollViewer"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <!-- [Converter] 리소스에 추가 -->
+        <local1:ByteToHexStringConverter x:Key="ByteToHexStringConverter"/>
+        <local2:ByteArrayToHexStringConverter x:Key="ByteArrayToHexStringConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -58,7 +65,7 @@
                 <Grid>
                     <ListView ItemsSource="{Binding DisplayInfo}"
                               HorizontalAlignment="Stretch"
-                              local2:AutoScrollViewer.AutoScroll="False"
+                              local3:AutoScrollViewer.AutoScroll="False"
                               ScrollViewer.HorizontalScrollBarVisibility="Auto"
                               ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <ListView.ItemContainerStyle>
@@ -101,9 +108,12 @@
                                                        Foreground="DarkBlue"
                                                        FontWeight="Bold">
                                                 <TextBlock.Text>
-                                                    <MultiBinding StringFormat="{}[{0:HH:mm:ss}] {1}">
+                                                    <MultiBinding StringFormat="{}[{0:HH:mm:ss}] {1} {2}">
                                                         <Binding Path="CurrentTime"/>
-                                                        <Binding Path="MessageByte"/>
+                                                        <!-- MessageByte (단일 바이트 값, 16진수로 변환됨) -->
+                                                        <Binding Path="MessageByte" Converter="{StaticResource ByteToHexStringConverter}"/>
+                                                        <!-- MessageBytes (바이트배열 값, 16진수로 변환됨) -->
+                                                        <Binding Path="MessageBytes" Converter="{StaticResource ByteArrayToHexStringConverter}"/>
                                                     </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>

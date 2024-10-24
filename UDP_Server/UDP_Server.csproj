@@ -64,6 +64,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\BitOperatorConverter.cs" />
+    <Compile Include="Converters\ByteArrayToHexStringConverter.cs" />
+    <Compile Include="Converters\ByteToHexStringConverter.cs" />
     <Compile Include="Models\AutoScrollViewer.cs" />
     <Compile Include="Models\Parser.cs" />
     <Compile Include="Services\UdpService.cs" />

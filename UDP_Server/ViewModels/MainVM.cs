@@ -99,7 +99,7 @@ namespace UDP_Server.ViewModels
         public MainVM()
         {
             _ipAddress = IPAddress.Loopback.ToString();
-            _port = 2000;
+            _port = 20000;
             _displayInfo = new ObservableCollection<DisplayInfo>();
             StartServerCommand = new RelayCommand(StartServer);
         }
@@ -115,7 +115,6 @@ namespace UDP_Server.ViewModels
             _udpService.UdpStart();
         }
 
-
         private void OnMessageReceived(byte[] messageListen, DateTime currentTime)
         {
             Parser parser = new Parser();
@@ -123,6 +122,7 @@ namespace UDP_Server.ViewModels
             string messageAsHex = string.Join(" ", messageListen.Select(b => $"0x{b:X2}")); // byte[]를 16진수 문자열로 변환
             Console.WriteLine($"Received: {messageAsHex}");
             DisplayInfo?.Clear();
+
             DisplayInfo.Add(new DisplayInfo { Description = "Mode override", MessageListen = parserData.ModeOverride.ModeOverrideParser(), CurrentTime = currentTime, MessageByte = parserData.ModeOverride });
             DisplayInfo.Add(new DisplayInfo { Description = "Flight mode", MessageListen = parserData.FlightMode.FlightModeParser(), CurrentTime = currentTime, MessageByte = parserData.FlightMode });
             DisplayInfo.Add(new DisplayInfo { Description = "Mode engage", MessageListen = parserData.ModeEngage.ModeEngageParser(), CurrentTime = currentTime, MessageByte = parserData.ModeEngage });
@@ -137,9 +137,9 @@ namespace UDP_Server.ViewModels
             DisplayInfo.Add(new DisplayInfo { Description = "스틱 횡방향 속도 조종명령", MessageListen = parserData.StickRoll.StickRollParser(), CurrentTime = currentTime, MessageByte = parserData.StickRoll });
             DisplayInfo.Add(new DisplayInfo { Description = "스틱 종방향 속도 조종명령", MessageListen = parserData.StickPitch.StickPitchParser(), CurrentTime = currentTime, MessageByte = parserData.StickPitch });
             DisplayInfo.Add(new DisplayInfo { Description = "스틱 방위 조종명령", MessageListen = parserData.StickYaw.StickYawParser(), CurrentTime = currentTime, MessageByte = parserData.StickYaw });
-            DisplayInfo.Add(new DisplayInfo { Description = "Longitude of Landing point", MessageListen = parserData.LonOfLP.LonOfLPParser(), CurrentTime = currentTime, MessageByte = parserData.LonOfLP });
-            DisplayInfo.Add(new DisplayInfo { Description = "Latitude of Landing point", MessageListen = parserData.LatOfLP.LatOfLPParser(), CurrentTime = currentTime, MessageByte = parserData.LatOfLP });
-            DisplayInfo.Add(new DisplayInfo { Description = "Altitude of Landing point", MessageListen = parserData.AltOfLP.AltOfLPParser(), CurrentTime = currentTime, MessageByte = parserData.AltOfLP });
+            DisplayInfo.Add(new DisplayInfo { Description = "Longitude of Landing point", MessageListen = parserData.LonOfLP.LonOfLPParser(), CurrentTime = currentTime, MessageBytes = parserData.LonOfLP });
+            DisplayInfo.Add(new DisplayInfo { Description = "Latitude of Landing point", MessageListen = parserData.LatOfLP.LatOfLPParser(), CurrentTime = currentTime, MessageBytes = parserData.LatOfLP });
+            DisplayInfo.Add(new DisplayInfo { Description = "Altitude of Landing point", MessageListen = parserData.AltOfLP.AltOfLPParser(), CurrentTime = currentTime, MessageBytes = parserData.AltOfLP });
             DisplayInfo.Add(new DisplayInfo { Description = "Engine Start / Stop", MessageListen = parserData.EngineStartStop.EngineStartStopParser(), CurrentTime = currentTime, MessageByte = parserData.EngineStartStop });
             DisplayInfo.Add(new DisplayInfo { Description = "구조장비 투하 전 개폐명령", MessageListen = parserData.RaftDrop.RaftDropParser(), CurrentTime = currentTime, MessageByte = parserData.RaftDrop });
         }

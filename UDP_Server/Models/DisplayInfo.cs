@@ -8,11 +8,13 @@ namespace UDP_Server.Models
 
         public string Description { get; set; }
 
+        public string MessageListen { get; set; }
+
         public DateTime CurrentTime { get; set; }
 
         public byte MessageByte { get; set; }
 
-        public string MessageListen { get; set; }
+        public byte[] MessageBytes { get; set; }
 
         #endregion
     }
