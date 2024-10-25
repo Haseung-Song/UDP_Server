@@ -66,10 +66,15 @@ namespace UDP_Server.Models
 
                     // [Byte #15. ~ Byte #18.]
                     LonOfLP = stream.GetBytes(14, 4),
-                    // [Byte # 19. ~ Byte #22.]
+                    // [Byte #19. ~ Byte #22.]
                     LatOfLP = stream.GetBytes(18, 4),
-                    // [Byte # 23. ~ Byte #24.]
+                    // [Byte #23. ~ Byte #24.]
                     AltOfLP = stream.GetBytes(22, 2),
+
+                    // [Byte #25.]
+                    EngineStartStop = (byte)stream.GetBits(24, 1, 7, 1),
+                    // [Byte #25.]
+                    RaftDrop = (byte)stream.GetBits(24, 1, 0, 1)
                 };
                 return field;
             }
