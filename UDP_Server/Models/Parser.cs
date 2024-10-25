@@ -99,6 +99,7 @@ namespace UDP_Server.Models
             // [# CRC 계산]
             byte[] crcData = new byte[26]; // [Byte #5.~ Byte #30.]
             Array.Copy(check, 4, crcData, 0, 26);
+
             // [Crc16ccitt] 계산 값
             ushort calculatedCrc = Crc16_ccitt.Crc16ccitt(ref crcData, (uint)crcData.Length);
             // [check]에서 받은 CRC 값 (31, 32 바이트 추출)
@@ -417,6 +418,14 @@ namespace UDP_Server.Models
             {
                 return "Invalid Bytes!";
             }
+
+            // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
+            // 즉, 클라이언트 측에서 데이터를 보낼 때, 리틀 엔디안으로 보내준다는 의미
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(lonOfLPByte);
+            }
+
             // 경도값 [4 Byte] To [uint]로 변환
             uint lonOfLPToInt = BitConverter.ToUInt32(lonOfLPByte, 0);
             // [0x00000000, 0xD693A400] => [-180, 180] 변환 공식, res = 0.0000001
@@ -430,6 +439,14 @@ namespace UDP_Server.Models
             {
                 return "Invalid Bytes!";
             }
+
+            // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
+            // 즉, 클라이언트 측에서 데이터를 보낼 때, 리틀 엔디안으로 보내준다는 의미
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(latOfLPByte);
+            }
+
             // 위도값 [4 Byte] To [uInt]로 변환
             uint latOfLPToInt = BitConverter.ToUInt32(latOfLPByte, 0);
             // [0x00000000, 0x6B49D200] => [-90, 90] 변환 공식, res = 0.0000001
@@ -443,6 +460,14 @@ namespace UDP_Server.Models
             {
                 return "Invalid Bytes!";
             }
+
+            // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
+            // 즉, 클라이언트 측에서 데이터를 보낼 때, 리틀 엔디안으로 보내준다는 의미
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(altOfLPByte);
+            }
+
             // 고도값 [2 Byte] To [ushort]로 변환
             ushort altOfLPToShort = BitConverter.ToUInt16(altOfLPByte, 0);
             // [0x0000, 0xEA60] => [-500, 1000] 변환 공식, res = 0.025
