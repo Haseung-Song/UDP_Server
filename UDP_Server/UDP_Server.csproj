@@ -67,6 +67,7 @@
     <Compile Include="Converters\ByteArrayToHexStringConverter.cs" />
     <Compile Include="Converters\ByteToHexStringConverter.cs" />
     <Compile Include="Models\AutoScrollViewer.cs" />
+    <Compile Include="Models\Crc16_ccitt.cs" />
     <Compile Include="Models\Parser.cs" />
     <Compile Include="Services\UdpService.cs" />
     <Compile Include="ViewModels\MainVM.cs" />
