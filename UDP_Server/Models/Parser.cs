@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Windows;
 using Soletop.IO;
 
 namespace UDP_Server.Models
@@ -74,7 +73,6 @@ namespace UDP_Server.Models
 
                         // [Byte #25.]
                         EngineStartStop = (byte)stream.GetBits(24, 1, 7, 1),
-                        // [Byte #25.]
                         RaftDrop = (byte)stream.GetBits(24, 1, 0, 1)
                     };
                     return field;
@@ -101,28 +99,28 @@ namespace UDP_Server.Models
             // 모든 바이트 길이가 32바이트 넘어가는지 확인
             if (check.Length > 32)
             {
-                _ = MessageBox.Show("바이트 길이를 다시 확인하세요.", "통신 실패", MessageBoxButton.OK, MessageBoxImage.Error);
+                Debug.WriteLine("바이트 길이를 다시 확인하세요.", "통신 실패");
                 throw new ArgumentException("Invalid data length");
             }
 
             // 첫 번째 바이트가 0xAF (Frame Sync)인지 확인
             if (check[0] != 0xAF)
             {
-                _ = MessageBox.Show("프레임 싱크를 다시 확인하세요.", "통신 실패", MessageBoxButton.OK, MessageBoxImage.Error);
-                throw new ArgumentException("Invalid Frame Sync!");
+                Debug.WriteLine("프레임 싱크를 다시 확인하세요.", "통신 실패");
+                //throw new ArgumentException("Invalid Frame Sync!");
             }
 
             // 두 번째 바이트가 0x01(목적지 주소)인지 확인
             if (check[1] != 0x01)
             {
-                _ = MessageBox.Show("목적지 주소를 다시 확인하세요.", "통신 실패", MessageBoxButton.OK, MessageBoxImage.Error);
+                Debug.WriteLine("목적지 주소를 다시 확인하세요.", "통신 실패");
                 throw new ArgumentException("Invalid Destination Address");
             }
 
             // 세 번째 바이트가 0x0A(출발지 주소)인지 확인
             if (check[2] != 0x0A)
             {
-                _ = MessageBox.Show("출발지 주소를 다시 확인하세요.", "통신 실패", MessageBoxButton.OK, MessageBoxImage.Error);
+                Debug.WriteLine("출발지 주소를 다시 확인하세요.", "통신 실패");
                 throw new ArgumentException("Invalid Source Address");
             }
 
