@@ -107,7 +107,7 @@ namespace UDP_Server.Models
             if (check[0] != 0xAF)
             {
                 Debug.WriteLine("프레임 싱크를 다시 확인하세요.", "통신 실패");
-                //throw new ArgumentException("Invalid Frame Sync!");
+                throw new ArgumentException("Invalid Frame Sync!");
             }
 
             // 두 번째 바이트가 0x01(목적지 주소)인지 확인
