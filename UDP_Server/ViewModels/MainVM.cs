@@ -20,12 +20,31 @@ namespace UDP_Server.ViewModels
         private string _ipAddress;
         private int _port;
         private ObservableCollection<DisplayInfo> _displayInfo;
+        private bool _IsStartBtnEnabled;
 
         #endregion
 
         #region [OnPropertyChanged]
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// [IsStartBtnEnabled]
+        /// </summary>
+        public bool IsStartBtnEnabled
+        {
+            get => _IsStartBtnEnabled;
+            private set
+            {
+                if (_IsStartBtnEnabled != value)
+                {
+                    _IsStartBtnEnabled = value;
+                    OnPropertyChanged();
+                }
+
+            }
+
+        }
 
         /// <summary>
         /// [IpAddress]
@@ -98,6 +117,7 @@ namespace UDP_Server.ViewModels
 
         public MainVM()
         {
+            _IsStartBtnEnabled = true;
             _ipAddress = IPAddress.Loopback.ToString();
             _port = 20000;
             _displayInfo = new ObservableCollection<DisplayInfo>();
@@ -113,6 +133,7 @@ namespace UDP_Server.ViewModels
             _udpService = new UdpService(Port);
             _udpService.MessageReceived += OnMessageReceived; // 이벤트 구독
             _udpService.UdpStart();
+            IsStartBtnEnabled = false;
         }
 
         private void OnMessageReceived(byte[] messageListen, DateTime currentTime)

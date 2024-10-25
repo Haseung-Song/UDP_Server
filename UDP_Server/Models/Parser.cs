@@ -387,7 +387,7 @@ namespace UDP_Server.Models
             ushort altOfLPToShort = BitConverter.ToUInt16(altOfLPByte, 0);
             // [0x0000, 0xEA60] => [-500, 1000] 변환 공식, res = 0.025
             double altOfLPInMeters = (altOfLPToShort * 0.025) - 500.0;
-            return (altOfLPToShort <= 65535) ? $"{altOfLPInMeters:F2}°(m)" : "Unknown";
+            return (altOfLPToShort <= 60000) ? $"{altOfLPInMeters:F2}°(m)" : "Unknown";
         }
 
         public static string EngineStartStopParser(this byte engineStartStopByte)

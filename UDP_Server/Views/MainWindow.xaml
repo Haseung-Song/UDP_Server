@@ -134,6 +134,7 @@
             <StackPanel Margin="5">
                 <Button Content="Start Server"
                         Command="{Binding StartServerCommand}"
+                        IsEnabled="{Binding IsStartBtnEnabled}"
                         Background="DarkTurquoise"
                         Height="25"
                         Width="100"/>
