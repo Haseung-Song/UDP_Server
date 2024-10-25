@@ -12,7 +12,6 @@
         xmlns:local3="clr-namespace:AutoScrollViewer"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <!-- [Converter] 리소스에 추가 -->
         <local1:ByteToHexStringConverter x:Key="ByteToHexStringConverter"/>
         <local2:ByteArrayToHexStringConverter x:Key="ByteArrayToHexStringConverter"/>
     </Window.Resources>
