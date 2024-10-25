@@ -419,15 +419,15 @@ namespace UDP_Server.Models
                 return "Invalid Bytes!";
             }
 
+            // 경도값 [4 Byte] To [uint]로 변환
+            uint lonOfLPToInt = BitConverter.ToUInt32(lonOfLPByte, 0);
+            // [BitConverter.ToUInt32] 같은 메서드는 [리틀 엔디안] 방식을 따름.
             // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
             // 즉, 클라이언트 측에서 데이터를 보낼 때, 리틀 엔디안으로 보내준다는 의미
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(lonOfLPByte);
             }
-
-            // 경도값 [4 Byte] To [uint]로 변환
-            uint lonOfLPToInt = BitConverter.ToUInt32(lonOfLPByte, 0);
             // [0x00000000, 0xD693A400] => [-180, 180] 변환 공식, res = 0.0000001
             double lonOfLPInDegree = (lonOfLPToInt * 0.0000001) - 180.0;
             return (lonOfLPToInt <= 3600000000) ? $"{lonOfLPInDegree:F7}°(도)" : "Unknown";
@@ -440,15 +440,15 @@ namespace UDP_Server.Models
                 return "Invalid Bytes!";
             }
 
+            // 위도값 [4 Byte] To [uInt]로 변환
+            uint latOfLPToInt = BitConverter.ToUInt32(latOfLPByte, 0);
+            // [BitConverter.ToUInt32] 같은 메서드는 [리틀 엔디안] 방식을 따름.
             // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
             // 즉, 클라이언트 측에서 데이터를 보낼 때, 리틀 엔디안으로 보내준다는 의미
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(latOfLPByte);
             }
-
-            // 위도값 [4 Byte] To [uInt]로 변환
-            uint latOfLPToInt = BitConverter.ToUInt32(latOfLPByte, 0);
             // [0x00000000, 0x6B49D200] => [-90, 90] 변환 공식, res = 0.0000001
             double latOfLPInDegree = (latOfLPToInt * 0.0000001) - 90.0;
             return (latOfLPToInt <= 1800000000) ? $"{latOfLPInDegree:F7}°(도)" : "Unknown";
@@ -461,15 +461,15 @@ namespace UDP_Server.Models
                 return "Invalid Bytes!";
             }
 
+            // 고도값 [2 Byte] To [ushort]로 변환
+            ushort altOfLPToShort = BitConverter.ToUInt16(altOfLPByte, 0);
+            // [BitConverter.ToUInt32] 같은 메서드는 [리틀 엔디안] 방식을 따름.
             // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
             // 즉, 클라이언트 측에서 데이터를 보낼 때, 리틀 엔디안으로 보내준다는 의미
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(altOfLPByte);
             }
-
-            // 고도값 [2 Byte] To [ushort]로 변환
-            ushort altOfLPToShort = BitConverter.ToUInt16(altOfLPByte, 0);
             // [0x0000, 0xEA60] => [-500, 1000] 변환 공식, res = 0.025
             double altOfLPInMeters = (altOfLPToShort * 0.025) - 500.0;
             return (altOfLPToShort <= 60000) ? $"{altOfLPInMeters:F2}°(m)" : "Unknown";
