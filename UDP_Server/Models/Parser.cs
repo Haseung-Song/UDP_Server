@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Soletop.IO;
 
 namespace UDP_Server.Models
@@ -7,76 +8,117 @@ namespace UDP_Server.Models
     {
         public FlightControlField Parse(byte[] data)
         {
-            using (ByteStream stream = new ByteStream(data, 0, data.Length))
+            try
             {
-                if (data.Length > 32)
+                using (ByteStream stream = new ByteStream(data, 0, data.Length))
                 {
-                    throw new ArgumentException("Invalid data length");
+                    CheckDataCondition(data);
+                    // [Flight Control Field] = [Byte #5.~ Byte #30.]
+                    FlightControlField field = new FlightControlField
+                    {
+                        // 1. [New 연산 계산 방식] => 직접 비트식연산 사용
+                        //ModeOverride = BitOperatorConverter.GetBitFrom7(data, 4, 7),
+                        //FlightMode = BitOperatorConverter.GetBitFrom6To5(data, 4),
+
+                        // 2. [Old 연산 계산 방식] => 솔탑 프레임워크 사용
+                        // # [GetBits] 메서드 #
+                        // 바이트 스트림의 특정 위치에서 비트 추출 역할
+                        // 첫 번째 인자: 시작 위치. (0 바이트부터 시작)
+                        // 두 번째 인자: 추출할 바이트 수.
+                        // 세 번째 인자: 비트 시작 위치.
+                        // 네 번째 인자: 추출할 비트 수.
+
+                        // [Byte #5.]
+                        // 7    번째 비트를 추출
+                        ModeOverride = (byte)stream.GetBits(4, 1, 7, 1),
+                        // 6 ~ 5번째 비트를 추출
+                        FlightMode = (byte)stream.GetBits(4, 1, 5, 2),
+                        // 4 ~ 1번째 비트를 추출
+                        ModeEngage = (byte)stream.GetBits(4, 1, 1, 4),
+
+                        // [Byte #6.]
+                        // 7    번째 비트를 추출
+                        FlapOverride = (byte)stream.GetBits(5, 1, 7, 1),
+                        // 6 ~ 1번째 비트를 추출
+                        FlapAngle = (byte)stream.GetBits(5, 1, 1, 6),
+
+                        // [Byte #7.]
+                        // 7    번째 비트를 추출
+                        WingTiltOverride = (byte)stream.GetBits(6, 1, 7, 1),
+                        // 6 ~ 0번째 비트를 추출
+                        TiltAngle = (byte)stream.GetBits(6, 1, 0, 7),
+
+                        // [Byte #8.]
+                        KnobSpeed = (byte)stream.Get(7, 1),
+                        // [Byte #9.]
+                        KnobAltitude = (byte)stream.Get(8, 1),
+                        // [Byte #10.]
+                        KnobHeading = (byte)stream.Get(9, 1),
+
+                        // [Byte #11.]
+                        StickThrottle = (byte)stream.Get(10, 1),
+                        // [Byte #12.]
+                        StickRoll = (byte)stream.Get(11, 1),
+                        // [Byte #13.]
+                        StickPitch = (byte)stream.Get(12, 1),
+                        // [Byte #14.]
+                        StickYaw = (byte)stream.Get(13, 1),
+
+                        // [Byte #15.~ Byte #18.]
+                        LonOfLP = stream.GetBytes(14, 4),
+                        // [Byte #19.~ Byte #22.]
+                        LatOfLP = stream.GetBytes(18, 4),
+                        // [Byte #23.~ Byte #24.]
+                        AltOfLP = stream.GetBytes(22, 2),
+
+                        // [Byte #25.]
+                        EngineStartStop = (byte)stream.GetBits(24, 1, 7, 1),
+                        // [Byte #25.]
+                        RaftDrop = (byte)stream.GetBits(24, 1, 0, 1)
+                    };
+                    return field;
                 }
 
-                FlightControlField field = new FlightControlField
-                {
-                    // 1. [New 연산 계산 방식] => 직접 비트식연산 사용
-                    //ModeOverride = BitOperatorConverter.GetBitFrom7(data, 4, 7),
-                    //FlightMode = BitOperatorConverter.GetBitFrom6To5(data, 4),
+            }
+            catch (ArgumentException ex)
+            {
+                Debug.WriteLine($"ArgumentException: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"General Exception: {ex.Message}");
+            }
+            return null;
+        }
 
-                    // 2. [Old 연산 계산 방식] => 솔탑 프레임워크 사용
-                    // # [GetBits] 메서드 #
-                    // 바이트 스트림의 특정 위치에서 비트 추출 역할
-                    // 첫 번째 인자: 시작 위치. (0 바이트부터 시작)
-                    // 두 번째 인자: 추출할 바이트 수.
-                    // 세 번째 인자: 비트 시작 위치.
-                    // 네 번째 인자: 추출할 비트 수.
+        /// <summary>
+        /// [데이터 파싱 조건]
+        /// </summary>
+        /// <param name="check"></param>
+        private void CheckDataCondition(byte[] check)
+        {
+            // 모든 바이트 길이가 32바이트 넘어가는지 확인
+            if (check.Length > 32)
+            {
+                throw new ArgumentException("Invalid data length");
+            }
 
-                    // [Byte #5.]
-                    // 7    번째 비트를 추출
-                    ModeOverride = (byte)stream.GetBits(4, 1, 7, 1),
-                    // 6 ~ 5번째 비트를 추출
-                    FlightMode = (byte)stream.GetBits(4, 1, 5, 2),
-                    // 4 ~ 1번째 비트를 추출
-                    ModeEngage = (byte)stream.GetBits(4, 1, 1, 4),
+            // 첫 번째 바이트가 0xAF (Frame Sync)인지 확인
+            if (check[0] != 0xAF)
+            {
+                throw new ArgumentException("Invalid Frame Sync!");
+            }
 
-                    // [Byte #6.]
-                    // 7    번째 비트를 추출
-                    FlapOverride = (byte)stream.GetBits(5, 1, 7, 1),
-                    // 6 ~ 1번째 비트를 추출
-                    FlapAngle = (byte)stream.GetBits(5, 1, 1, 6),
+            // 두 번째 바이트가 0x01 (목적지주소)인지 확인
+            if (check[1] != 0x01)
+            {
+                throw new ArgumentException("Invalid Destination Address");
+            }
 
-                    // [Byte #7.]
-                    // 7    번째 비트를 추출
-                    WingTiltOverride = (byte)stream.GetBits(6, 1, 7, 1),
-                    // 6 ~ 0번째 비트를 추출
-                    TiltAngle = (byte)stream.GetBits(6, 1, 0, 7),
-
-                    // [Byte #8.]
-                    KnobSpeed = (byte)stream.Get(7, 1),
-                    // [Byte #9.]
-                    KnobAltitude = (byte)stream.Get(8, 1),
-                    // [Byte #10.]
-                    KnobHeading = (byte)stream.Get(9, 1),
-
-                    // [Byte #11.]
-                    StickThrottle = (byte)stream.Get(10, 1),
-                    // [Byte #12.]
-                    StickRoll = (byte)stream.Get(11, 1),
-                    // [Byte #13.]
-                    StickPitch = (byte)stream.Get(12, 1),
-                    // [Byte #14.]
-                    StickYaw = (byte)stream.Get(13, 1),
-
-                    // [Byte #15. ~ Byte #18.]
-                    LonOfLP = stream.GetBytes(14, 4),
-                    // [Byte #19. ~ Byte #22.]
-                    LatOfLP = stream.GetBytes(18, 4),
-                    // [Byte #23. ~ Byte #24.]
-                    AltOfLP = stream.GetBytes(22, 2),
-
-                    // [Byte #25.]
-                    EngineStartStop = (byte)stream.GetBits(24, 1, 7, 1),
-                    // [Byte #25.]
-                    RaftDrop = (byte)stream.GetBits(24, 1, 0, 1)
-                };
-                return field;
+            // 세 번째 바이트가 0x0A (출발지주소)인지 확인
+            if (check[2] != 0x0A)
+            {
+                throw new ArgumentException("Invalid Source Address");
             }
 
         }
