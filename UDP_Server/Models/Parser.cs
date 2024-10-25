@@ -96,6 +96,21 @@ namespace UDP_Server.Models
         /// <param name="check"></param>
         private void CheckDataCondition(byte[] check)
         {
+            // [# CRC 계산]
+            byte[] crcData = new byte[26]; // [Byte #5.~ Byte #30.]
+            Array.Copy(check, 4, crcData, 0, 26);
+            // [Crc16ccitt] 계산 값
+            ushort calculatedCrc = Crc16_ccitt.Crc16ccitt(ref crcData, (uint)crcData.Length);
+            // [check]에서 받은 CRC 값 (31, 32 바이트 추출)
+            ushort receiveingCrc = (ushort)((check[30] << 8) | check[31]);
+
+            // [# CRC 비교]
+            if (calculatedCrc != receiveingCrc)
+            {
+                Debug.WriteLine("해당 CRC 값을 다시 확인하세요.", "통신 실패");
+                throw new ArgumentException("Mismatch CRC value!");
+            }
+
             // 모든 바이트 길이가 32바이트 넘어가는지 확인
             if (check.Length > 32)
             {
@@ -111,14 +126,14 @@ namespace UDP_Server.Models
             }
 
             // 두 번째 바이트가 0x01(목적지 주소)인지 확인
-            if (check[1] != 0x01)
+            if (check[1] != 0x0A)
             {
                 Debug.WriteLine("목적지 주소를 다시 확인하세요.", "통신 실패");
                 throw new ArgumentException("Invalid Destination Address");
             }
 
             // 세 번째 바이트가 0x0A(출발지 주소)인지 확인
-            if (check[2] != 0x0A)
+            if (check[2] != 0x01)
             {
                 Debug.WriteLine("출발지 주소를 다시 확인하세요.", "통신 실패");
                 throw new ArgumentException("Invalid Source Address");

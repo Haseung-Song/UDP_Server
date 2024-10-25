@@ -1,6 +1,6 @@
 ﻿namespace UDP_Server.Models
 {
-    public class Crc16_ccitt
+    public static class Crc16_ccitt
     {
         /// <summary>
         /// [CRC 계산 공식!]
@@ -54,7 +54,7 @@
         /// <param name="buf"></param>
         /// <param name="len"></param>
         /// <returns></returns>
-        public ushort Crc16ccitt(ref byte[] buf, uint len)
+        public static ushort Crc16ccitt(ref byte[] buf, uint len)
         {
             uint crc = 0;
             for (uint i = 0; i < len; i++)
