@@ -7,13 +7,17 @@
         Title="UDP_Server"
         Width="1110"
         Height="610"
-        xmlns:local1="clr-namespace:ByteToHexStringConverter"
-        xmlns:local2="clr-namespace:ByteArrayToHexStringConverter"
+        xmlns:local1="clr-namespace:ByteToHexStrConverter"
+        xmlns:local2="clr-namespace:ByteArrayToHexStrConverter"
         xmlns:local3="clr-namespace:AutoScrollViewer"
+        xmlns:local4="clr-namespace:ByteToDecimalStrConverter"
+        xmlns:local5="clr-namespace:ByteArrayToDecimalStrConverter"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <local1:ByteToHexStringConverter x:Key="ByteToHexStringConverter"/>
-        <local2:ByteArrayToHexStringConverter x:Key="ByteArrayToHexStringConverter"/>
+        <local1:ByteToHexStrConverter x:Key="ByteToHexStrConverter"/>
+        <local2:ByteArrayToHexStrConverter x:Key="ByteArrayToHexStrConverter"/>
+        <local4:ByteToDecimalStrConverter x:Key="ByteToDecimalStrConverter"/>
+        <local5:ByteArrayToDecimalStrConverter x:Key="ByteArrayToDecimalStrConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -75,7 +79,7 @@
                         <ListView.View>
                             <GridView>
 
-                                <GridViewColumn Header="Flight" Width="330">
+                                <GridViewColumn Header="Flight" Width="250">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -87,7 +91,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Control" Width="330">
+                                <GridViewColumn Header="Control" Width="300">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding MessageListen, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -99,20 +103,41 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Field" Width="330">
+                                <GridViewColumn Header="Field 1 (Hex)" Width="250">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock TextAlignment="Center"
+                                            <TextBlock TextAlignment="Left"
                                                        FontSize="12"
                                                        Foreground="DarkBlue"
                                                        FontWeight="Bold">
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="{}[{0:HH:mm:ss}] {1} {2}">
                                                         <Binding Path="CurrentTime"/>
-                                                        <!-- MessageByte (단일 바이트 값, 16진수로 변환됨) -->
-                                                        <Binding Path="MessageByte" Converter="{StaticResource ByteToHexStringConverter}"/>
-                                                        <!-- MessageBytes (바이트배열 값, 16진수로 변환됨) -->
-                                                        <Binding Path="MessageBytes" Converter="{StaticResource ByteArrayToHexStringConverter}"/>
+                                                        <!-- MessageByte (단일 바이트 값, 16진수로 변환됨!) -->
+                                                        <Binding Path="MessageByte" Converter="{StaticResource ByteToHexStrConverter}"/>
+                                                        <!-- MessageBytes (바이트배열 값, 16진수로 변환됨!) -->
+                                                        <Binding Path="MessageBytes" Converter="{StaticResource ByteArrayToHexStrConverter}"/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn Header="Field 2 (Decimal)" Width="250">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock TextAlignment="Left"
+                                                       FontSize="12"
+                                                       Foreground="DarkBlue"
+                                                       FontWeight="Bold">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}[{0:HH:mm:ss}] {1} {2}">
+                                                        <Binding Path="CurrentTime"/>
+                                                        <!-- MessageByte (단일 바이트 값, 10진수로 변환됨!) -->
+                                                        <Binding Path="MessageByte" Converter="{StaticResource ByteToDecimalStrConverter}"/>
+                                                        <!-- MessageBytes (바이트배열 값, 10진수로 변환됨!) -->
+                                                        <Binding Path="MessageBytes" Converter="{StaticResource ByteArrayToDecimalStrConverter}"/>
                                                     </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>

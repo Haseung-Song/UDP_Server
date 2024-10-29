@@ -73,8 +73,6 @@ namespace UDP_Server.Models
 
                         // [Byte #25.]
                         EngineStartStop = (byte)stream.GetBits(24, 1, 7, 1),
-
-                        // [Byte #25.]
                         RaftDrop = (byte)stream.GetBits(24, 1, 0, 1)
                     };
                     return field;
@@ -421,9 +419,8 @@ namespace UDP_Server.Models
                 return "Invalid Bytes!";
             }
 
-            // 경도값 [4 Byte] To [uint]로 변환
+            // # 경도값 [4 Byte] To [uint]로 변환 #
             uint lonOfLPToInt = BitConverter.ToUInt32(lonOfLPByte, 0);
-            // [BitConverter.ToUInt32] 같은 메서드는 [리틀 엔디안] 방식을 따름.
             // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
             // 즉, 클라이언트 측에서 데이터를 보낼 때, [빅 엔디안]으로 보내준다는 의미
             // 엔디안 방식만 맞춰서 정확히 변환되면, 최종 UI 값은 엔디안 여부와 상관없이 동일하게 표시
@@ -443,9 +440,8 @@ namespace UDP_Server.Models
                 return "Invalid Bytes!";
             }
 
-            // 위도값 [4 Byte] To [uInt]로 변환
+            // # 위도값 [4 Byte] To [uInt]로 변환 #
             uint latOfLPToInt = BitConverter.ToUInt32(latOfLPByte, 0);
-            // [BitConverter.ToUInt32] 같은 메서드는 [리틀 엔디안] 방식을 따름.
             // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
             // 즉, 클라이언트 측에서 데이터를 보낼 때, [빅 엔디안]으로 보내준다는 의미
             // 엔디안 방식만 맞춰서 정확히 변환되면, 최종 UI 값은 엔디안 여부와 상관없이 동일하게 표시
@@ -465,9 +461,8 @@ namespace UDP_Server.Models
                 return "Invalid Bytes!";
             }
 
-            // 고도값 [2 Byte] To [ushort]로 변환
+            // # 고도값 [2 Byte] To [ushort]로 변환 #
             ushort altOfLPToShort = BitConverter.ToUInt16(altOfLPByte, 0);
-            // [BitConverter.ToUInt32] 같은 메서드는 [리틀 엔디안] 방식을 따름.
             // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
             // 즉, 클라이언트 측에서 데이터를 보낼 때, [빅 엔디안]으로 보내준다는 의미
             // 엔디안 방식만 맞춰서 정확히 변환되면, 최종 UI 값은 엔디안 여부와 상관없이 동일하게 표시

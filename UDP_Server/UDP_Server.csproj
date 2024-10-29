@@ -64,8 +64,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\BitOperatorConverter.cs" />
-    <Compile Include="Converters\ByteArrayToHexStringConverter.cs" />
-    <Compile Include="Converters\ByteToHexStringConverter.cs" />
+    <Compile Include="Converters\ByteArrayToDecimalStrConverter.cs" />
+    <Compile Include="Converters\ByteArrayToHexStrConverter.cs" />
+    <Compile Include="Converters\ByteToDecimalStrConverter.cs" />
+    <Compile Include="Converters\ByteToHexStrConverter.cs" />
     <Compile Include="Models\AutoScrollViewer.cs" />
     <Compile Include="Models\Crc16_ccitt.cs" />
     <Compile Include="Models\Parser.cs" />

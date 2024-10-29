@@ -2,15 +2,16 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace ByteArrayToHexStringConverter
+namespace ByteToDecimalStrConverter
 {
-    public class ByteArrayToHexStringConverter : IValueConverter
+    public class ByteToDecimalStrConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is byte[] messageBytes)
+            if (value is byte messageByte)
             {
-                return $"Bytes: {BitConverter.ToString(messageBytes).Replace("-", " ")}"; // MessageBytes가 있을 때만 16진수 문자열로 출력
+                // D: 숫자를 10진수(Decimal)로 변환
+                return $"{messageByte:D}"; // Byte => [10진수] 문자열로 변환 후 출력
             }
             return string.Empty; // 값이 없으면 출력 (X)
         }
