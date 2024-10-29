@@ -73,6 +73,8 @@ namespace UDP_Server.Models
 
                         // [Byte #25.]
                         EngineStartStop = (byte)stream.GetBits(24, 1, 7, 1),
+
+                        // [Byte #25.]
                         RaftDrop = (byte)stream.GetBits(24, 1, 0, 1)
                     };
                     return field;
@@ -424,6 +426,7 @@ namespace UDP_Server.Models
             // [BitConverter.ToUInt32] 같은 메서드는 [리틀 엔디안] 방식을 따름.
             // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
             // 즉, 클라이언트 측에서 데이터를 보낼 때, [빅 엔디안]으로 보내준다는 의미
+            // 엔디안 방식만 맞춰서 정확히 변환되면, 최종 UI 값은 엔디안 여부와 상관없이 동일하게 표시
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(lonOfLPByte);
@@ -445,6 +448,7 @@ namespace UDP_Server.Models
             // [BitConverter.ToUInt32] 같은 메서드는 [리틀 엔디안] 방식을 따름.
             // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
             // 즉, 클라이언트 측에서 데이터를 보낼 때, [빅 엔디안]으로 보내준다는 의미
+            // 엔디안 방식만 맞춰서 정확히 변환되면, 최종 UI 값은 엔디안 여부와 상관없이 동일하게 표시
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(latOfLPByte);
@@ -466,6 +470,7 @@ namespace UDP_Server.Models
             // [BitConverter.ToUInt32] 같은 메서드는 [리틀 엔디안] 방식을 따름.
             // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
             // 즉, 클라이언트 측에서 데이터를 보낼 때, [빅 엔디안]으로 보내준다는 의미
+            // 엔디안 방식만 맞춰서 정확히 변환되면, 최종 UI 값은 엔디안 여부와 상관없이 동일하게 표시
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(altOfLPByte);
