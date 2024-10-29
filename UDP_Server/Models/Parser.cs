@@ -423,7 +423,7 @@ namespace UDP_Server.Models
             uint lonOfLPToInt = BitConverter.ToUInt32(lonOfLPByte, 0);
             // [BitConverter.ToUInt32] 같은 메서드는 [리틀 엔디안] 방식을 따름.
             // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
-            // 즉, 클라이언트 측에서 데이터를 보낼 때, 리틀 엔디안으로 보내준다는 의미
+            // 즉, 클라이언트 측에서 데이터를 보낼 때, [빅 엔디안]으로 보내준다는 의미
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(lonOfLPByte);
@@ -444,7 +444,7 @@ namespace UDP_Server.Models
             uint latOfLPToInt = BitConverter.ToUInt32(latOfLPByte, 0);
             // [BitConverter.ToUInt32] 같은 메서드는 [리틀 엔디안] 방식을 따름.
             // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
-            // 즉, 클라이언트 측에서 데이터를 보낼 때, 리틀 엔디안으로 보내준다는 의미
+            // 즉, 클라이언트 측에서 데이터를 보낼 때, [빅 엔디안]으로 보내준다는 의미
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(latOfLPByte);
@@ -465,14 +465,14 @@ namespace UDP_Server.Models
             ushort altOfLPToShort = BitConverter.ToUInt16(altOfLPByte, 0);
             // [BitConverter.ToUInt32] 같은 메서드는 [리틀 엔디안] 방식을 따름.
             // [리틀 엔디안]으로 들어온 경우에, [바이트 배열]을 리버스 후, [빅 엔디안] 변환
-            // 즉, 클라이언트 측에서 데이터를 보낼 때, 리틀 엔디안으로 보내준다는 의미
+            // 즉, 클라이언트 측에서 데이터를 보낼 때, [빅 엔디안]으로 보내준다는 의미
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(altOfLPByte);
             }
             // [0x0000, 0xEA60] => [-500, 1000] 변환 공식, res = 0.025
             double altOfLPInMeters = (altOfLPToShort * 0.025) - 500.0;
-            return (altOfLPToShort <= 60000) ? $"{altOfLPInMeters:F2}°(m)" : "Unknown";
+            return (altOfLPToShort <= 60000) ? $"{altOfLPInMeters:F3}°(m)" : "Unknown";
         }
 
         public static string EngineStartStopParser(this byte engineStartStopByte)
