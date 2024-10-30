@@ -108,7 +108,7 @@
                                         <DataTemplate>
                                             <TextBlock TextAlignment="Left"
                                                        FontSize="12"
-                                                       Foreground="DarkBlue"
+                                                       Foreground="DarkCyan"
                                                        FontWeight="Bold">
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="{}[{0:HH:mm:ss}] {1} {2}">
@@ -129,7 +129,7 @@
                                         <DataTemplate>
                                             <TextBlock TextAlignment="Left"
                                                        FontSize="12"
-                                                       Foreground="DarkBlue"
+                                                       Foreground="DarkMagenta"
                                                        FontWeight="Bold">
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="{}[{0:HH:mm:ss}] {1} {2}">
