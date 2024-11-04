@@ -16,13 +16,13 @@ namespace UDP_Server.Models
                     // [Flight Control Field] = [Byte #5.~ Byte #30.]
                     FlightControlField field = new FlightControlField
                     {
-                        // 1. [New 연산 계산 방식] => 직접 비트식연산 사용
+                        // 1. [New 연산 계산 방식] => [직접 비트식연산] 사용
                         //ModeOverride = BitOperatorConverter.GetBitFrom7(data, 4, 7),
                         //FlightMode = BitOperatorConverter.GetBitFrom6To5(data, 4),
 
-                        // 2. [Old 연산 계산 방식] => 솔탑 프레임워크 사용
-                        // # [GetBits] 메서드 #
-                        // 바이트 스트림의 특정 위치에서 비트 추출 역할
+                        // 2. [Old 연산 계산 방식] => [솔탑 프레임워크] 사용
+                        // 1) [GetBits] 메서드: [단일 바이트] 추출
+                        // 바이트 스트림의 특정 위치에서 비트 추출 목적
                         // 첫 번째 인자: 시작 위치. (0 바이트부터 시작)
                         // 두 번째 인자: 추출할 바이트 수.
                         // 세 번째 인자: 비트 시작 위치.
@@ -47,6 +47,11 @@ namespace UDP_Server.Models
                         WingTiltOverride = (byte)stream.GetBits(6, 1, 7, 1),
                         // 6 ~ 0번째 비트를 추출
                         TiltAngle = (byte)stream.GetBits(6, 1, 0, 7),
+
+                        // 2) [Get] 메서드: [다수 바이트] 추출
+                        // 바이트 스트림 특정 위치에서 바이트 추출 목적
+                        // 첫 번째 인자: 시작 위치. (0 바이트부터 시작)
+                        // 두 번째 인자: 추출할 바이트 수.
 
                         // [Byte #8.]
                         KnobSpeed = (byte)stream.Get(7, 1),
