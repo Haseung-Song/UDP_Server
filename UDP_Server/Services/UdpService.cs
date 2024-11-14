@@ -33,6 +33,14 @@ namespace UDP_Server.Services
                 }
 
             }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("UDP 서버 데이터 수신 작업이 취소되었습니다.");
+            }
+            catch (ObjectDisposedException)
+            {
+                Debug.WriteLine("UDP 소켓이 이미 닫혀 있습니다.");
+            }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
@@ -48,7 +56,9 @@ namespace UDP_Server.Services
         {
             if (_udpServer != null)
             {
+                // [UDP 서버] 닫기!
                 _udpServer.Close();
+                // [서버 리소스] 해제
                 _udpServer.Dispose();
             }
 
