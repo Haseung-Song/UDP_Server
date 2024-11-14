@@ -12,6 +12,8 @@
         xmlns:local3="clr-namespace:AutoScrollViewer"
         xmlns:local4="clr-namespace:ByteToDecimalStrConverter"
         xmlns:local5="clr-namespace:ByteArrayToDecimalStrConverter"
+        xmlns:viewmodels="clr-namespace:UDP_Server.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainVM}"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <local1:ByteToHexStrConverter x:Key="ByteToHexStrConverter"/>
@@ -29,7 +31,6 @@
             <ColumnDefinition Width="1.5*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
         <Border Grid.Column="0">
             <StackPanel Margin="10">
                 <TextBlock Text="IP"
@@ -156,14 +157,13 @@
                 Grid.ColumnSpan="2"
                 Margin="10,5,10,5">
             <StackPanel Margin="5">
-                <Button Content="Start Server"
-                        Command="{Binding StartServerCommand}"
-                        IsEnabled="{Binding IsStartBtnEnabled}"
+                <Button Content="{Binding InitStop_BtnText}"
+                        Command="{Binding InitAndStopServerCommand}"
                         Background="DarkTurquoise"
                         Height="25"
                         Width="100"/>
             </StackPanel>
         </Border>
-
+        
     </Grid>
 </Window>

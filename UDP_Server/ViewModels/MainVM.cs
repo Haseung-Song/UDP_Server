@@ -17,6 +17,7 @@ namespace UDP_Server.ViewModels
         #region [프로퍼티]
 
         private UdpService _udpService;
+
         private string _ipAddress;
         private int _port;
         private ObservableCollection<DisplayInfo> _displayInfo;
@@ -27,6 +28,11 @@ namespace UDP_Server.ViewModels
         #region [OnPropertyChanged]
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// [InitStop_BtnText]
+        /// </summary>
+        public string InitStop_BtnText => IsStartBtnEnabled ? "Init Server" : "Stop Server";
 
         /// <summary>
         /// [IsStartBtnEnabled]
@@ -40,6 +46,7 @@ namespace UDP_Server.ViewModels
                 {
                     _IsStartBtnEnabled = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(InitStop_BtnText));
                 }
 
             }
@@ -109,7 +116,7 @@ namespace UDP_Server.ViewModels
 
         #region [ICommand]
 
-        public ICommand StartServerCommand { get; set; }
+        public ICommand InitAndStopServerCommand { get; set; }
 
         #endregion
 
@@ -117,23 +124,35 @@ namespace UDP_Server.ViewModels
 
         public MainVM()
         {
-            _IsStartBtnEnabled = true;
+            IsStartBtnEnabled = true;
             _ipAddress = IPAddress.Loopback.ToString();
             _port = 20000;
             _displayInfo = new ObservableCollection<DisplayInfo>();
-            StartServerCommand = new RelayCommand(StartServer);
+            InitAndStopServerCommand = new RelayCommand(InitAndStop);
         }
 
         #endregion
 
         #region [버튼 및 기능]
 
-        private void StartServer()
+        private void InitAndStop()
         {
-            _udpService = new UdpService(Port);
-            _udpService.MessageReceived += OnMessageReceived; // 이벤트 구독
-            _udpService.UdpStart();
-            IsStartBtnEnabled = false;
+            if (_udpService == null || IsStartBtnEnabled)
+            {
+                IsStartBtnEnabled = false;
+                _udpService = new UdpService(Port);
+                _udpService.MessageReceived += OnMessageReceived; // 이벤트 구독
+                _udpService.UdpStart();
+                Console.WriteLine("UDP Server Started...");
+            }
+            else
+            {
+                IsStartBtnEnabled = true;
+                _udpService.MessageReceived -= OnMessageReceived; // 이벤트 해제
+                _udpService.UdpStop();
+                Console.WriteLine("UDP Server Stopped...");
+            }
+
         }
 
         private void OnMessageReceived(byte[] messageListen, DateTime currentTime)
@@ -142,6 +161,7 @@ namespace UDP_Server.ViewModels
             {
                 Parser parser = new Parser();
                 FlightControlField parserData = parser.Parse(messageListen);
+                // [UI 초기화] [작업]
                 DisplayInfo?.Clear();
                 if (parserData != null)
                 {
