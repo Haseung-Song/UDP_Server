@@ -39,7 +39,7 @@ namespace UDP_Server.Services
             }
             catch (ObjectDisposedException)
             {
-                Debug.WriteLine("UDP 소켓이 이미 닫혀 있습니다.");
+                Debug.WriteLine("UDP 소켓이 닫혔습니다.");
             }
             catch (Exception ex)
             {
