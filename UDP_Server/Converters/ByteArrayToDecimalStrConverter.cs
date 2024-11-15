@@ -30,7 +30,7 @@ namespace ByteArrayToDecimalStrConverter
                 {
                     return null; // 다른 [OO Bytes]는 [null] 출력
                 }
-                return $"(X), Decimal: {result}"; // [쉼표]가 포함된 [형식]으로 [반환]
+                return $"Decimal: {result}"; // [쉼표]가 포함된 [형식]으로 [반환]
             }
             return string.Empty; // 값이 없으면 출력 (X)
         }
