@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using Soletop.IO;
 
 namespace UDP_Server.Models
 {
@@ -10,79 +9,72 @@ namespace UDP_Server.Models
         {
             try
             {
-                using (ByteStream stream = new ByteStream(data, 0, data.Length))
+                ByteStream stream = new ByteStream(data, 0, data.Length);
+                CheckDataCondition(data);
+                FlightControlField field = new FlightControlField
                 {
-                    CheckDataCondition(data);
-                    // [Flight Control Field] = [Byte #5.~ Byte #30.]
-                    FlightControlField field = new FlightControlField
-                    {
-                        // 1. [New 연산 계산 방식] => [직접 비트식연산] 사용
-                        //ModeOverride = BitOperatorConverter.GetBitFrom7(data, 4, 7),
-                        //FlightMode = BitOperatorConverter.GetBitFrom6To5(data, 4),
+                    // [Byte #5.]
+                    // 7    번째 비트(MSB)를 추출
+                    ModeOverride = stream.GetBits(4, 7, 1),
+                    // 6 ~ 5번째 비트를 추출
+                    FlightMode = stream.GetBits(4, 5, 2),
+                    // 4 ~ 1번째 비트를 추출
+                    ModeEngage = stream.GetBits(4, 1, 4),
 
-                        // 2. [Old 연산 계산 방식] => [솔탑 프레임워크] 사용
-                        // 1) [GetBits] 메서드: [단일 바이트] 추출
-                        // 바이트 스트림의 특정 위치에서 비트 추출 목적
-                        // 첫 번째 인자: 시작 위치. (0 바이트부터 시작)
-                        // 두 번째 인자: 추출할 바이트 수.
-                        // 세 번째 인자: 비트 시작 위치.
-                        // 네 번째 인자: 추출할 비트 수.
+                    // [Byte #6.]
+                    // 7    번째 비트(MSB)를 추출
+                    FlapOverride = stream.GetBits(5, 7, 1),
+                    // 6 ~ 1번째 비트를 추출
+                    FlapAngle = stream.GetBits(5, 1, 6),
 
-                        // [Byte #5.]
-                        // 7    번째 비트를 추출
-                        ModeOverride = (byte)stream.GetBits(4, 1, 7, 1),
-                        // 6 ~ 5번째 비트를 추출
-                        FlightMode = (byte)stream.GetBits(4, 1, 5, 2),
-                        // 4 ~ 1번째 비트를 추출
-                        ModeEngage = (byte)stream.GetBits(4, 1, 1, 4),
+                    // [Byte #7.]
+                    // 7    번째 비트(MSB)를 추출
+                    WingTiltOverride = stream.GetBits(6, 7, 1),
+                    // 6 ~ 0번째 비트(LSB)를 추출
+                    TiltAngle = stream.GetBits(6, 1, 7),
 
-                        // [Byte #6.]
-                        // 7    번째 비트를 추출
-                        FlapOverride = (byte)stream.GetBits(5, 1, 7, 1),
-                        // 6 ~ 1번째 비트를 추출
-                        FlapAngle = (byte)stream.GetBits(5, 1, 1, 6),
+                    // [Byte #8.]
+                    // 8  바이트를 추출
+                    KnobSpeed = stream.Get(7),
+                    // [Byte #9.]
+                    // 9  바이트를 추출
+                    KnobAltitude = stream.Get(8),
+                    // [Byte #10.]
+                    // 10 바이트를 추출
+                    KnobHeading = stream.Get(9),
 
-                        // [Byte #7.]
-                        // 7    번째 비트를 추출
-                        WingTiltOverride = (byte)stream.GetBits(6, 1, 7, 1),
-                        // 6 ~ 0번째 비트를 추출
-                        TiltAngle = (byte)stream.GetBits(6, 1, 0, 7),
+                    // [Byte #11.]
+                    // 11 바이트를 추출
+                    StickThrottle = stream.Get(10),
+                    // [Byte #12.]
+                    // 12 바이트를 추출
+                    StickRoll = stream.Get(11),
+                    // [Byte #13.]
+                    // 13 바이트를 추출
+                    StickPitch = stream.Get(12),
+                    // [Byte #14.]
+                    // 14 바이트를 추출
+                    StickYaw = stream.Get(13),
 
-                        // 2) [Get] 메서드: [다수 바이트] 추출
-                        // 바이트 스트림 특정 위치에서 바이트 추출 목적
-                        // 첫 번째 인자: 시작 위치. (0 바이트부터 시작)
-                        // 두 번째 인자: 추출할 바이트 수.
+                    // [Byte #15.~ Byte #18.]
+                    // 15 ~ 18바이트까지 추출
+                    LonOfLP = stream.GetBytes(14, 4),
 
-                        // [Byte #8.]
-                        KnobSpeed = (byte)stream.Get(7, 1),
-                        // [Byte #9.]
-                        KnobAltitude = (byte)stream.Get(8, 1),
-                        // [Byte #10.]
-                        KnobHeading = (byte)stream.Get(9, 1),
+                    // [Byte #19.~ Byte #22.]
+                    // 19 ~ 22바이트까지 추출
+                    LatOfLP = stream.GetBytes(18, 4),
 
-                        // [Byte #11.]
-                        StickThrottle = (byte)stream.Get(10, 1),
-                        // [Byte #12.]
-                        StickRoll = (byte)stream.Get(11, 1),
-                        // [Byte #13.]
-                        StickPitch = (byte)stream.Get(12, 1),
-                        // [Byte #14.]
-                        StickYaw = (byte)stream.Get(13, 1),
+                    // [Byte #23.~ Byte #24.]
+                    // 23 ~ 24바이트까지 추출
+                    AltOfLP = stream.GetBytes(22, 2),
 
-                        // [Byte #15.~ Byte #18.]
-                        LonOfLP = stream.GetBytes(14, 4),
-                        // [Byte #19.~ Byte #22.]
-                        LatOfLP = stream.GetBytes(18, 4),
-                        // [Byte #23.~ Byte #24.]
-                        AltOfLP = stream.GetBytes(22, 2),
-
-                        // [Byte #25.]
-                        EngineStartStop = (byte)stream.GetBits(24, 1, 7, 1),
-                        RaftDrop = (byte)stream.GetBits(24, 1, 0, 1)
-                    };
-                    return field;
-                }
-
+                    // [Byte #25.]
+                    // 7    번째 비트(MSB)를 추출
+                    EngineStartStop = stream.GetBits(24, 7, 1),
+                    // 0    번째 비트(LSB)를 추출
+                    RaftDrop = stream.GetBits(24, 0, 1)
+                };
+                return field;
             }
             catch (ArgumentException ex)
             {
@@ -143,6 +135,79 @@ namespace UDP_Server.Models
             {
                 Debug.WriteLine("출발지 주소를 다시 확인하세요.", "통신 실패");
                 throw new ArgumentException("Invalid Source Address");
+            }
+
+        }
+
+        /// <summary>
+        /// [ByteStream] 클래스: [ByteStream]에서 [비트]와 [바이트]를 효율적으로 추출하기 위한 유틸리티 클래스
+        /// </summary>
+        public class ByteStream
+        {
+            private readonly byte[] _buffer;
+            private readonly int _offset;
+            private readonly int _length;
+
+            public ByteStream(byte[] buffer, int offset, int length)
+            {
+                _buffer = buffer;
+                _offset = offset;
+                _length = length;
+            }
+
+            /// <summary>
+            /// 1) [GetBits] 메서드: [단일 바이트] 추출
+            /// [ByteStream] 특정 위치 => bitCount 추출
+            /// </summary>
+            /// <param name="byteIndex">바이트 인덱스</param>
+            /// <param name="bitPosition">시작 비트 위치</param>
+            /// <param name="bitCount">추출할 비트 수</param>
+            /// <returns>추출된 여러 비트 값</returns>
+            public byte GetBits(int byteIndex, int bitPosition, int bitCount)
+            {
+                // [byteIndex]가 배열의 끝을 초과하지 않는지 확인
+                // [bitPosition]은 [0 ~ 7]번 비트까지 존재
+                // [bitPosition]은 음수가 될 수 없음.
+                // [bitCount]는 추출할 비트 수이므로,
+                // [bitCount]는 1보다 작을 수 없으며,
+                // [bitPosition] + [bitCount]의 합은 8보다 작아야 함.
+                if (byteIndex >= _length || bitPosition < 0 || bitCount < 1 || (bitPosition + bitCount) > 8)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(byteIndex), "Parameters are out of range.");
+                }
+                int mask = (1 << bitCount) - 1;
+                return (byte)((_buffer[byteIndex] >> bitPosition) & mask);
+            }
+
+            /// <summary>
+            /// 2) [Get] 메서드: [단일 바이트] 추출
+            /// [ByteStream] 특정 위치 => [1 Byte] 추출 목적!
+            /// </summary>
+            /// <param name="byteIndex">바이트 인덱스</param>
+            /// <returns>해당 바이트 값</returns>
+            public byte Get(int byteIndex)
+            {
+                // [byteIndex]가 배열의 끝을 초과하지 않는지 확인
+                return byteIndex >= _length ? throw new ArgumentOutOfRangeException(nameof(byteIndex)) : _buffer[byteIndex];
+            }
+
+            /// <summary>
+            /// 3) [GetBytes] 메서드: [다수 바이트] 추출
+            /// [ByteStream] 특정 위치 => [byteCount] 추출 목적!
+            /// </summary>
+            /// <param name="startIndex">시작 인덱스</param>
+            /// <param name="byteCount">추출할 바이트 수</param>
+            /// <returns>추출된 바이트 배열</returns>
+            public byte[] GetBytes(int startIndex, int byteCount)
+            {
+                // [startIndex] + [byteCount]의 합은 배열의 끝을 초과할 수 없음.
+                if (startIndex + byteCount > _length)
+                {
+                    throw new ArgumentOutOfRangeException("Invalid startIndex or byteCount.");
+                }
+                byte[] result = new byte[byteCount];
+                Array.Copy(_buffer, startIndex, result, 0, byteCount);
+                return result;
             }
 
         }
